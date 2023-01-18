@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import pagination, permissions, viewsets, mixins
 from rest_framework.filters import SearchFilter
 
-from posts.models import Follow, Group, Post, User
+from posts.models import Group, Post, User
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
                           PostSerializer, UserSerializer)
@@ -47,17 +47,15 @@ class CommentViewSet(viewsets.ModelViewSet):
 class FollowViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     viewsets.GenericViewSet):
-    queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     pagination_class = pagination.LimitOffsetPagination
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (SearchFilter,)
-    search_fields = ('following__username', 'user__username',)
+    search_fields = ('=following__username', '=user__username',)
 
     def get_queryset(self):
         """Возвращает все подписки пользователя, сделавшего запрос"""
-        new_queryset = Follow.objects.filter(user=self.request.user)
-        return new_queryset
+        return self.request.user.follower.all()
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)

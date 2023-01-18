@@ -68,7 +68,7 @@ class FollowSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
                 fields=('user', 'following',),
-                message="Вы уже подписаны на данного автора"
+                message='You already follow this author!'
             ),
         )
 
