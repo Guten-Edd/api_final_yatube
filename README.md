@@ -31,3 +31,7 @@ cd yatube_api
 python manage.py runserver
 ```
 **Documentation available at url: http://127.0.0.1:8000/redoc/**
+
+## References
+
+- Project was created by [Eduard Solovev](https://github.com/Guten-Edd)
